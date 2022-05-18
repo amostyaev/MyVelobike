@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:paddingHorizontal="16dp"
+    android:paddingBottom="16dp"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/station_title"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Station 1" />
+
+    <ImageView
+        android:id="@+id/station_electric_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/station_info_electric"
+        android:src="@drawable/ic_station_electric"
+        app:layout_constraintBottom_toBottomOf="@id/station_title"
+        app:layout_constraintStart_toEndOf="@id/station_title"
+        app:layout_constraintTop_toTopOf="@id/station_title" />
+
+    <TextView
+        android:id="@+id/station_locked"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:text="@string/station_info_locked"
+        android:textColor="@color/error"
+        app:layout_constraintStart_toEndOf="@id/station_electric_type"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/station_close"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_action_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/station_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toStartOf="@id/station_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/station_title"
+        tools:text="Red Square, 1" />
+
+    <TextView
+        android:id="@+id/station_ordinary_bikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:text="@string/station_info_bikes"
+        app:drawableStartCompat="@drawable/ic_station_bike_ordinary"
+        app:layout_constraintBottom_toBottomOf="@id/station_ordinary_bikes_count"
+        app:layout_constraintEnd_toStartOf="@id/station_ordinary_bikes_count"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/station_address"
+        app:layout_constraintTop_toTopOf="@id/station_ordinary_bikes_count" />
+
+    <TextView
+        android:id="@+id/station_ordinary_bikes_count"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@color/station_color_selector"
+        app:layout_constraintEnd_toStartOf="@id/station_ordinary_places"
+        app:layout_constraintStart_toEndOf="@id/station_ordinary_bikes"
+        app:layout_constraintTop_toBottomOf="@id/station_address"
+        tools:text="20" />
+
+    <TextView
+        android:id="@+id/station_ordinary_places"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:text="@string/station_info_places"
+        app:drawableStartCompat="@drawable/ic_station_place_ordinary"
+        app:layout_constraintBottom_toBottomOf="@id/station_ordinary_places_count"
+        app:layout_constraintEnd_toStartOf="@id/station_ordinary_places_count"
+        app:layout_constraintStart_toEndOf="@id/station_ordinary_bikes_count"
+        app:layout_constraintTop_toTopOf="@id/station_ordinary_places_count" />
+
+    <TextView
+        android:id="@+id/station_ordinary_places_count"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@color/station_color_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/station_ordinary_places"
+        app:layout_constraintTop_toBottomOf="@id/station_address"
+        tools:text="10" />
+
+    <TextView
+        android:id="@+id/station_electric_bikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:text="@string/station_info_bikes"
+        app:drawableStartCompat="@drawable/ic_station_bike_electric"
+        app:layout_constraintBottom_toBottomOf="@id/station_electric_bikes_count"
+        app:layout_constraintEnd_toStartOf="@id/station_electric_bikes_count"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/station_address"
+        app:layout_constraintTop_toTopOf="@id/station_electric_bikes_count" />
+
+    <TextView
+        android:id="@+id/station_electric_bikes_count"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/station_color_selector"
+        app:layout_constraintEnd_toStartOf="@id/station_electric_places"
+        app:layout_constraintStart_toEndOf="@id/station_electric_bikes"
+        app:layout_constraintTop_toBottomOf="@id/station_ordinary_places_count"
+        tools:text="6" />
+
+    <TextView
+        android:id="@+id/station_electric_places"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="8dp"
+        android:text="@string/station_info_places"
+        app:drawableStartCompat="@drawable/ic_station_place_electric"
+        app:layout_constraintBottom_toBottomOf="@id/station_electric_places_count"
+        app:layout_constraintEnd_toStartOf="@id/station_electric_places_count"
+        app:layout_constraintStart_toEndOf="@id/station_electric_bikes_count"
+        app:layout_constraintTop_toTopOf="@id/station_electric_places_count" />
+
+    <TextView
+        android:id="@+id/station_electric_places_count"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/station_color_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/station_electric_places"
+        app:layout_constraintTop_toBottomOf="@id/station_ordinary_places_count"
+        tools:text="10" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/station_ordinary_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="station_ordinary_bikes,station_ordinary_places,station_ordinary_bikes_count,station_ordinary_places_count" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/station_electric_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="station_electric_bikes,station_electric_places,station_electric_bikes_count,station_electric_places_count" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

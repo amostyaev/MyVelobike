@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp">
+
+    <TextView
+        android:id="@+id/ride_date"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="02.09.2021 08:39 - 09:25 (352-385)" />
+
+    <ImageView
+        android:id="@+id/ride_electric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/station_info_electric"
+        android:src="@drawable/ic_station_electric"
+        app:layout_constraintBottom_toBottomOf="@id/ride_date"
+        app:layout_constraintStart_toEndOf="@id/ride_date"
+        app:layout_constraintTop_toTopOf="@id/ride_date" />
+
+    <TextView
+        android:id="@+id/ride_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_stats_distance"
+        app:drawableTint="@android:color/holo_red_light"
+        app:layout_constraintEnd_toStartOf="@id/ride_bike"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ride_date"
+        tools:text="7.8 km" />
+
+    <TextView
+        android:id="@+id/ride_bike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_stats_rides"
+        app:drawableTint="@android:color/holo_purple"
+        app:layout_constraintEnd_toStartOf="@id/ride_time"
+        app:layout_constraintStart_toEndOf="@id/ride_distance"
+        app:layout_constraintTop_toBottomOf="@id/ride_date"
+        tools:text="50000" />
+
+    <TextView
+        android:id="@+id/ride_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_stats_time"
+        app:drawableTint="@android:color/holo_green_light"
+        app:layout_constraintEnd_toStartOf="@id/ride_speed"
+        app:layout_constraintStart_toEndOf="@id/ride_bike"
+        app:layout_constraintTop_toBottomOf="@id/ride_date"
+        tools:text="00:30:53" />
+
+    <TextView
+        android:id="@+id/ride_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="4dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/ic_stats_speed"
+        app:drawableTint="@android:color/holo_orange_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ride_time"
+        app:layout_constraintTop_toBottomOf="@id/ride_date"
+        tools:text="16.7 km/h" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

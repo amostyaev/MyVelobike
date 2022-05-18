@@ -1,0 +1,50 @@
+<resources>
+
+    <string name="app_name">Velostats</string>
+
+    <string name="auth_login">Login</string>
+    <string name="auth_pin">Pin</string>
+    <string name="auth_sign_in">Sign in</string>
+
+    <string name="title_history">History</string>
+    <string name="title_realtime">Realtime</string>
+    <string name="title_places">Places</string>
+
+    <string name="action_stats">Stats</string>
+    <string name="action_sync">Sync</string>
+    <string name="action_sync_completed">Sync completed</string>
+
+    <string name="ride_distance">%.1f km</string>
+    <string name="ride_speed">%.1f km/h</string>
+
+    <string name="average_title">Average</string>
+    <string name="max_title">Max</string>
+    <string name="max_day_title">In a day</string>
+    <string name="max_hint_route_date">(%1$d - %2$d)\n%3$s</string>
+    <string name="max_hint_speed">%1$.1fkm/%2$s\n%3$s</string>
+
+    <string name="chooser_date">Date</string>
+    <string name="chooser_speed">Speed</string>
+    <string name="chooser_distance">Distance</string>
+    <string name="chooser_time">Time</string>
+
+    <string name="history_total_title">Total</string>
+    <string name="history_bikes_title">Bikes</string>
+    <string name="history_stations_title">Stations</string>
+    <string name="history_dates_title">Dates</string>
+    <string name="history_select_dates">Select dates</string>
+
+    <string name="station_info_title">Station %d</string>
+    <string name="station_info_electric">Electric</string>
+    <string name="station_info_locked">Locked</string>
+    <string name="station_info_bikes">Available bikes</string>
+    <string name="station_info_places">Free places</string>
+
+    <string name="places_statistics">Visited %1$d out of %2$d</string>
+
+    <plurals name="history_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
+</resources>

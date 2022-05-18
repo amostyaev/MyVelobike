@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/historyFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_mode_history"
+        android:title="@string/title_history" />
+    <item
+        android:id="@+id/realtimeFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_mode_realtime"
+        android:title="@string/title_realtime" />
+    <item
+        android:id="@+id/placesFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_mode_places"
+        android:title="@string/title_places" />
+</menu>
