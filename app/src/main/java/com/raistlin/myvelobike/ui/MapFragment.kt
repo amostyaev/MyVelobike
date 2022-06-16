@@ -38,14 +38,17 @@ abstract class MapFragment : Fragment() {
             mapReady(map)
         }
 
+        setupBinding(binding)
+        return binding.root
+    }
+
+    protected open fun setupBinding(binding: FragmentMapBinding) {
         binding.mapSync.setOnClickListener {
             lifecycleScope.launchWhenResumed {
                 makeSync()
                 Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
             }
         }
-
-        return binding.root
     }
 
     abstract fun mapReady(map: GoogleMap)

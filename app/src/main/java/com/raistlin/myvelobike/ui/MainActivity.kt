@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             fallbackOnNavigateUpListener = ::onSupportNavigateUp
         )
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val subMode = destination.id == R.id.ridesFragment || destination.id == R.id.authFragment
+            val subMode = destination.id == R.id.ridesFragment || destination.id == R.id.ridesPlacesFragment || destination.id == R.id.authFragment
             binding.bottomNavigation.isVisible = !subMode
         }
         binding.mainToolbar.setupWithNavController(navController, appBarConfiguration)

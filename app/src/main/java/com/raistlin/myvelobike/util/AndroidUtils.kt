@@ -17,6 +17,6 @@ fun Long.asTimeString(context: Context): String {
     return SimpleDateFormat("${plural}HH:mm:ss", Locale.US).format(zoned)
 }
 
-fun LocalDate.asString() = "$dayOfMonth.${if (monthNumber < 10) "0$monthNumber" else monthNumber}.$year"
+fun LocalDate.asString() = "${if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth}.${if (monthNumber < 10) "0$monthNumber" else monthNumber}.$year"
 fun LocalDateTime.asTimeString() = "${if (hour < 10) "0$hour" else hour}:${if (minute < 10) "0$minute" else minute}"
 fun Long.utcDate() = Date(this - with(Calendar.getInstance()) { get(Calendar.ZONE_OFFSET) + get(Calendar.DST_OFFSET) })

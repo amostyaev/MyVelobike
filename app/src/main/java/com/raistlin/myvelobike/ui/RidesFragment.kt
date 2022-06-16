@@ -2,8 +2,10 @@ package com.raistlin.myvelobike.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.adapter.RidesAdapter
 import com.raistlin.myvelobike.databinding.FragmentRidesBinding
@@ -48,6 +50,11 @@ class RidesFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_on_map -> {
+                findNavController().navigateUp()
+                findNavController().navigate(R.id.ridesPlacesFragment, bundleOf(RidesPlacesFragment.KEY_RIDES to arguments?.getSerializable(KEY_RIDES)))
+                true
+            }
             R.id.action_statistics -> {
                 recordsShown = !recordsShown
                 if (recordsShown) {
