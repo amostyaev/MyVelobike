@@ -42,6 +42,8 @@ class RealtimeFragment : MapFragment() {
     }
 
     private fun showStations(map: GoogleMap, stations: List<Station>) {
+        if (stations.isEmpty()) return
+
         map.clear()
         stations.forEach { station ->
             map.addMarker {

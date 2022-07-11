@@ -129,7 +129,8 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
             }
         }
         withContext(Dispatchers.IO) {
-            dao.insertStations(stations.toEntity())
+            dao.clearStations()
+            dao.insertStations(stations.filter { it.id > 0 }.toEntity())
         }
     }
 

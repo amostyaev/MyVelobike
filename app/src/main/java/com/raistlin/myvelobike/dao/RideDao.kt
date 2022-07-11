@@ -29,4 +29,6 @@ interface RideDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertStations(rides: List<StationEntity>)
 
+    @Query("DELETE FROM StationEntity")
+    fun clearStations()
 }

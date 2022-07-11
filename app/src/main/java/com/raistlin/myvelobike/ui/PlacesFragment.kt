@@ -55,6 +55,8 @@ class PlacesFragment : MapFragment() {
     }
 
     private fun showPlaces(map: GoogleMap, stations: List<Place>) {
+        if (stations.isEmpty()) return
+
         map.clear()
         stations.forEach { place ->
             map.addMarker {
@@ -86,7 +88,7 @@ class PlacesFragment : MapFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_statistics -> {
-                val places = viewModel.places.replayCache.last()
+                val places = viewModel.places.replayCache.lastOrNull() ?: return true
                 Snackbar.make(requireView(), getString(R.string.places_statistics, places.count { it.visits > 0 }, places.size), Snackbar.LENGTH_LONG).show()
                 true
             }

@@ -1,13 +1,19 @@
 package com.raistlin.myvelobike.dto
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlin.math.max
 
 @Serializable
 data class Station(
 
     @SerialName("Id")
+    @Serializable(with = StationIdSerializer::class)
     val id: Int,
 
     @SerialName("Address")
@@ -71,4 +77,17 @@ enum class StationType {
 
     @SerialName("electric")
     Electric
+}
+
+object StationIdSerializer : KSerializer<Int> {
+
+    override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.INT)
+
+    override fun serialize(encoder: Encoder, value: Int) {
+        encoder.encodeInt(value)
+    }
+
+    override fun deserialize(decoder: Decoder): Int {
+        return decoder.decodeString().replace('c', '1').toInt()
+    }
 }
