@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease
+          ./gradlew build
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v2
         with:
