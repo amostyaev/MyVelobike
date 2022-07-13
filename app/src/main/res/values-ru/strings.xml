@@ -17,17 +17,6 @@
     <string name="ride_distance">%.1f км</string>
     <string name="ride_speed">%.1f км/ч</string>
 
-    <string name="average_title">В среднем</string>
-    <string name="max_title">Максимум</string>
-    <string name="max_day_title">За день</string>
-    <string name="max_hint_route_date">(%1$d - %2$d)\n%3$s</string>
-    <string name="max_hint_speed">%1$.1fкм/%2$s\n%3$s</string>
-
-    <string name="chooser_date">Дата</string>
-    <string name="chooser_speed">Скорость</string>
-    <string name="chooser_distance">Расстояние</string>
-    <string name="chooser_time">Время</string>
-
     <string name="history_total_title">Всего</string>
     <string name="history_bikes_title">Велосипеды</string>
     <string name="history_stations_title">Станции</string>
