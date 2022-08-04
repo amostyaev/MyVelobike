@@ -40,6 +40,8 @@
     <string name="station_info_bikes">Available bikes</string>
     <string name="station_info_places">Free places</string>
 
+    <string name="map_not_synced">Date unknown</string>
+
     <string name="places_statistics">Visited %1$d out of %2$d</string>
 
     <plurals name="history_days">

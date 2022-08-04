@@ -2,10 +2,7 @@ package com.raistlin.myvelobike.store
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import com.raistlin.myvelobike.dto.Authorization
 import com.raistlin.myvelobike.dto.LoginData
@@ -18,11 +15,15 @@ import java.io.IOException
 private val Context.authDataStore: DataStore<Preferences> by preferencesDataStore(
     name = "authorization"
 )
+private val Context.prefsDataStore: DataStore<Preferences> by preferencesDataStore(
+    name = "prefs"
+)
 
 private val AUTH_LOGIN = stringPreferencesKey("auth_login")
 private val AUTH_PIN = stringPreferencesKey("auth_pin")
 private val AUTH_TOKEN = stringPreferencesKey("auth_token")
 private val AUTH_REFRESH_TOKEN = stringPreferencesKey("auth_refresh_token")
+private val PREFS_LAST_SYNC = longPreferencesKey("prefs_last_sync")
 
 suspend fun Context.saveLoginData(data: LoginData) {
     authDataStore.edit { preferences ->
@@ -64,4 +65,21 @@ suspend fun Context.getAuthData() = authDataStore.data
             token = preferences[AUTH_TOKEN] ?: "",
             refreshToken = preferences[AUTH_REFRESH_TOKEN] ?: ""
         )
+    }.stateIn(MainScope())
+
+suspend fun Context.saveLastSync(lastSync: Long) {
+    prefsDataStore.edit { preferences ->
+        preferences[PREFS_LAST_SYNC] = lastSync
+    }
+}
+
+suspend fun Context.getLastSync() = prefsDataStore.data
+    .catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        preferences[PREFS_LAST_SYNC] ?: 0L
     }.stateIn(MainScope())

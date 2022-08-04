@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Raistlin/Android/MyVelobike/app/src/main/res/drawable/ic_place_famous.xml" value="0.127" />
+        <entry key="..\:/Raistlin/Android/MyVelobike/app/src/main/res/drawable/ic_place_popular.xml" value="0.127" />
+        <entry key="..\:/Raistlin/Android/MyVelobike/app/src/main/res/drawable/ic_place_visited.xml" value="0.127" />
         <entry key="..\:/Raistlin/Android/MyVelobike/app/src/main/res/drawable/ic_station_bike_electric.xml" value="0.1" />
+        <entry key="..\:/Raistlin/Android/MyVelobike/app/src/main/res/layout/fragment_map.xml" value="0.25" />
       </map>
     </option>
   </component>

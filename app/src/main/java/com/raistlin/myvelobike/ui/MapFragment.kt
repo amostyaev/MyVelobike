@@ -9,7 +9,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -18,8 +20,12 @@ import com.google.maps.android.ktx.awaitMap
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.databinding.FragmentMapBinding
 import com.raistlin.myvelobike.dto.Position
+import com.raistlin.myvelobike.store.getLastSync
 import com.raistlin.myvelobike.util.dp
 import com.raistlin.myvelobike.viewmodel.MapViewModel
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 abstract class MapFragment : Fragment() {
 
@@ -47,6 +53,19 @@ abstract class MapFragment : Fragment() {
             lifecycleScope.launchWhenResumed {
                 makeSync()
                 Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                requireContext().getLastSync().collect { lastSync ->
+                    when (lastSync) {
+                        0L -> binding.mapLastSync.setText(R.string.map_not_synced)
+                        else -> {
+                            val date = SimpleDateFormat("d MMM HH:mm", Locale.getDefault()).format(Date(lastSync))
+                            binding.mapLastSync.text = date
+                        }
+                    }
+                }
             }
         }
     }

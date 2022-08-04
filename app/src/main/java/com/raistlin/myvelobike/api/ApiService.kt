@@ -13,6 +13,7 @@ import com.raistlin.myvelobike.entity.toEntity
 import com.raistlin.myvelobike.store.getAuthData
 import com.raistlin.myvelobike.store.getLoginData
 import com.raistlin.myvelobike.store.saveAuthData
+import com.raistlin.myvelobike.store.saveLastSync
 import com.raistlin.myvelobike.util.JSONUtils
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -131,6 +132,7 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
         withContext(Dispatchers.IO) {
             dao.clearStations()
             dao.insertStations(stations.filter { it.id > 0 }.toEntity())
+            context.saveLastSync(System.currentTimeMillis())
         }
     }
 

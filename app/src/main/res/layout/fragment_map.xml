@@ -9,6 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/map_last_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="14sp"
+        android:text="@string/map_not_synced" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/station"
         android:name="com.raistlin.myvelobike.ui.StationInfoFragment"

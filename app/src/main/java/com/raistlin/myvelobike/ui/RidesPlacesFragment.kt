@@ -20,6 +20,7 @@ class RidesPlacesFragment : MapFragment() {
     override fun setupBinding(binding: FragmentMapBinding) {
         super.setupBinding(binding)
         binding.mapSync.isVisible = false
+        binding.mapLastSync.isVisible = false
     }
 
     @Suppress("UNCHECKED_CAST")
