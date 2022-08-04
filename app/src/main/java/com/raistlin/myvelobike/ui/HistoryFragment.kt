@@ -17,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.databinding.FragmentHistoryBinding
 import com.raistlin.myvelobike.dto.Ride
+import com.raistlin.myvelobike.store.getBalance
+import com.raistlin.myvelobike.store.getLoginData
 import com.raistlin.myvelobike.util.asTimeString
 import com.raistlin.myvelobike.util.utcDate
 import com.raistlin.myvelobike.viewmodel.BikeViewModel
@@ -37,6 +39,22 @@ class HistoryFragment : Fragment() {
             lifecycleScope.launchWhenResumed {
                 viewModel.syncStats().collect()
                 Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                requireContext().getBalance().collect { balance ->
+                    binding.profileBalance.text = getString(R.string.history_balance, balance)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                requireContext().getLoginData().collect { loginData ->
+                    binding.profileLogin.text = getString(R.string.history_login, loginData.login)
+                }
             }
         }
 

@@ -24,6 +24,7 @@ private val AUTH_PIN = stringPreferencesKey("auth_pin")
 private val AUTH_TOKEN = stringPreferencesKey("auth_token")
 private val AUTH_REFRESH_TOKEN = stringPreferencesKey("auth_refresh_token")
 private val PREFS_LAST_SYNC = longPreferencesKey("prefs_last_sync")
+private val PREFS_BALANCE = intPreferencesKey("prefs_balance")
 
 suspend fun Context.saveLoginData(data: LoginData) {
     authDataStore.edit { preferences ->
@@ -82,4 +83,21 @@ suspend fun Context.getLastSync() = prefsDataStore.data
         }
     }.map { preferences ->
         preferences[PREFS_LAST_SYNC] ?: 0L
+    }.stateIn(MainScope())
+
+suspend fun Context.saveBalance(balance: Int) {
+    prefsDataStore.edit { preferences ->
+        preferences[PREFS_BALANCE] = balance
+    }
+}
+
+suspend fun Context.getBalance() = prefsDataStore.data
+    .catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        preferences[PREFS_BALANCE] ?: 0
     }.stateIn(MainScope())

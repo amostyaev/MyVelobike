@@ -28,6 +28,9 @@
     <string name="chooser_distance">Distance</string>
     <string name="chooser_time">Time</string>
 
+    <string name="history_login">Login: %s</string>
+    <string name="history_balance">Balance: %d RUB</string>
+
     <string name="history_total_title">Total</string>
     <string name="history_bikes_title">Bikes</string>
     <string name="history_stations_title">Stations</string>

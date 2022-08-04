@@ -5,15 +5,9 @@ import android.content.Context
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.raistlin.myvelobike.dao.RideDao
-import com.raistlin.myvelobike.dto.Authorization
-import com.raistlin.myvelobike.dto.Events
-import com.raistlin.myvelobike.dto.Ride
-import com.raistlin.myvelobike.dto.Station
+import com.raistlin.myvelobike.dto.*
 import com.raistlin.myvelobike.entity.toEntity
-import com.raistlin.myvelobike.store.getAuthData
-import com.raistlin.myvelobike.store.getLoginData
-import com.raistlin.myvelobike.store.saveAuthData
-import com.raistlin.myvelobike.store.saveLastSync
+import com.raistlin.myvelobike.store.*
 import com.raistlin.myvelobike.util.JSONUtils
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -87,7 +81,21 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
         return response.body()
     }
 
+    private suspend fun profile(): Profile {
+        val response = client.get(
+            urlString = "https://apivelobike.velobike.ru/v2/profile"
+        ) {
+            parameter("rnd", System.currentTimeMillis().toString())
+            parameter("timestamp", System.currentTimeMillis().toString())
+        }
+        if (!response.status.isSuccess()) {
+            throw RuntimeException("Received ${response.status.value}: ${response.status.description}")
+        }
+        return response.body<ProfileResponse>().profile
+    }
+
     fun syncStats() = flow {
+        context.saveBalance(profile().balance)
         var offset = 0
         do {
             val events = stats(STAT_LIMIT, offset)

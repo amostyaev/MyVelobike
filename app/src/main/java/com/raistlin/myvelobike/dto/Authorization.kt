@@ -12,3 +12,15 @@ data class Authorization(
     @SerialName("refresh_token")
     val refreshToken: String
 )
+
+@Serializable
+data class ProfileResponse(
+    @SerialName("Profile")
+    val profile: Profile
+)
+
+@Serializable
+data class Profile(
+    @SerialName("Balance")
+    val balance: Int
+)

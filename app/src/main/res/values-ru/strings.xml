@@ -28,6 +28,9 @@
     <string name="chooser_distance">Расстояние</string>
     <string name="chooser_time">Время</string>
 
+    <string name="history_login">Логин: %s</string>
+    <string name="history_balance">Баланс: %d₽</string>
+
     <string name="history_total_title">Всего</string>
     <string name="history_bikes_title">Велосипеды</string>
     <string name="history_stations_title">Станции</string>
