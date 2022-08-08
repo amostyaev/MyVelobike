@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,11 +22,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PlacesFragment : MapFragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     @SuppressLint("PotentialBehaviorOverride")
     override fun mapReady(map: GoogleMap) {
@@ -80,19 +77,22 @@ class PlacesFragment : MapFragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_places, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_statistics -> {
-                val places = viewModel.places.replayCache.lastOrNull() ?: return true
-                Snackbar.make(requireView(), getString(R.string.places_statistics, places.count { it.visits > 0 }, places.size), Snackbar.LENGTH_LONG).show()
-                true
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_places, menu)
             }
-            else -> super.onOptionsItemSelected(item)
-        }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_statistics -> {
+                        val places = viewModel.places.replayCache.lastOrNull() ?: return true
+                        Snackbar.make(requireView(), getString(R.string.places_statistics, places.count { it.visits > 0 }, places.size), Snackbar.LENGTH_LONG).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }

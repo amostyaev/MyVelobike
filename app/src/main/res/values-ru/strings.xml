@@ -11,6 +11,7 @@
     <string name="title_places">Места</string>
 
     <string name="action_stats">Статистика</string>
+    <string name="action_electric">Показать электрические велосипеды</string>
     <string name="action_sync">Синхронизация</string>
     <string name="action_sync_completed">Синхронизация завершена</string>
 

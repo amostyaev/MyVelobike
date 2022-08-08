@@ -19,6 +19,8 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
 
     private val selectedId = MutableStateFlow<Int?>(null)
 
+    private val electricFilter = MutableStateFlow(false)
+
     private val rides = dao.getAllRides().map { it.toDto() }.shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     val stations = dao.getAllStations().map { it.toDto() }.shareIn(viewModelScope, SharingStarted.Lazily, 1)
@@ -33,6 +35,10 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         emit(stations.map { Place(it.id, it.position, it.fillStatus(), it.isElectric(), visits.getOrElse(it.id) { 0 }) })
     }.shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
+    val filteredStations = stations.combineTransform(electricFilter) { stations, electric ->
+        emit(if (electric) stations.filter { it.isElectric() || it.availableElectricBikes > 0 } else stations)
+    }
+
     val selectedStation = stations.combineTransform(selectedId) { stations, selected ->
         emit(stations.find { it.id == selected })
     }
@@ -45,6 +51,12 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         service.syncStations()
         service.syncStats().catch {  }.flowOn(Dispatchers.IO).collect()
     }
+
+    fun filterStations(electric: Boolean) {
+        electricFilter.value = electric
+    }
+
+    fun isFiltered() = electricFilter.value
 
     fun selectStation(id: Int) {
         selectedId.value = id

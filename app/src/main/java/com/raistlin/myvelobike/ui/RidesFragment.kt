@@ -3,7 +3,9 @@ package com.raistlin.myvelobike.ui
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.raistlin.myvelobike.R
@@ -16,11 +18,6 @@ class RidesFragment : Fragment() {
     private var records: RidesRecordsFragment? = null
     private var recordsShown = false
     private lateinit var rides: List<Ride>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -43,29 +40,32 @@ class RidesFragment : Fragment() {
         records = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_rides, menu)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_rides, menu)
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_on_map -> {
-                findNavController().navigateUp()
-                findNavController().navigate(R.id.ridesPlacesFragment, bundleOf(RidesPlacesFragment.KEY_RIDES to arguments?.getSerializable(KEY_RIDES)))
-                true
-            }
-            R.id.action_statistics -> {
-                recordsShown = !recordsShown
-                if (recordsShown) {
-                    records?.displayStats(rides)
-                } else {
-                    records?.hideStats()
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_on_map -> {
+                        findNavController().navigateUp()
+                        findNavController().navigate(R.id.ridesPlacesFragment, bundleOf(RidesPlacesFragment.KEY_RIDES to arguments?.getSerializable(KEY_RIDES)))
+                        true
+                    }
+                    R.id.action_statistics -> {
+                        recordsShown = !recordsShown
+                        if (recordsShown) {
+                            records?.displayStats(rides)
+                        } else {
+                            records?.hideStats()
+                        }
+                        true
+                    }
+                    else -> false
                 }
-                true
             }
-            else -> super.onOptionsItemSelected(item)
-        }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     companion object {
