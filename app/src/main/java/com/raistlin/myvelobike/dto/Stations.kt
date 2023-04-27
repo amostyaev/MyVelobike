@@ -88,6 +88,10 @@ object StationIdSerializer : KSerializer<Int> {
     }
 
     override fun deserialize(decoder: Decoder): Int {
-        return decoder.decodeString().replace('c', '1').toInt()
+        return decoder.decodeString()
+            .replace("c", "10")
+            .replace("m", "10")
+            .replace("ot", "1000")
+            .toInt()
     }
 }
