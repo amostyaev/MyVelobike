@@ -81,7 +81,7 @@ enum class StationType {
 
 object StationIdSerializer : KSerializer<Int> {
 
-    override val descriptor = PrimitiveSerialDescriptor("Id", PrimitiveKind.INT)
+    override val descriptor = PrimitiveSerialDescriptor("Bike.Id", PrimitiveKind.INT)
 
     override fun serialize(encoder: Encoder, value: Int) {
         encoder.encodeInt(value)

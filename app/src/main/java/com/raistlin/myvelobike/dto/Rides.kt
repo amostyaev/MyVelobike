@@ -5,6 +5,7 @@ import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -83,7 +84,7 @@ data class Events(
 )
 
 object EventSerializer : JsonContentPolymorphicSerializer<Event>(Event::class) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Event> {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Event> {
         val value = element as JsonObject?
         val type = value?.get("Type") as JsonPrimitive?
         return when (type?.content) {
@@ -95,12 +96,12 @@ object EventSerializer : JsonContentPolymorphicSerializer<Event>(Event::class) {
 }
 
 object DurationAsLongSerializer : KSerializer<Long> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Duration", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Bike.Duration", PrimitiveKind.INT)
     override fun serialize(encoder: Encoder, value: Long) = encoder.encodeString(value.toString())
     override fun deserialize(decoder: Decoder): Long {
         val value = decoder.decodeString()
         val parser = SimpleDateFormat("dd.HH:mm:ss", Locale.US)
-        val result = parser.parse(value) ?: throw RuntimeException("Illegal duration data: $value")
+        val result = parser.parse(value) ?: throw SerializationException("Illegal duration data: $value")
         // add one day and time zone offset as the numbering starts from zero
         return (result.time + with(Calendar.getInstance()) { get(Calendar.ZONE_OFFSET) + get(Calendar.DST_OFFSET) }) / 1000 + 86400
     }
