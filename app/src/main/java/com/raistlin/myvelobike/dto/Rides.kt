@@ -29,7 +29,10 @@ enum class BikeType {
     Ordinary,
 
     @SerialName("electric")
-    Electric
+    Electric,
+
+    @SerialName("omni")
+    Omni
 }
 
 @Serializable
@@ -52,9 +55,11 @@ data class Ride(
     val duration: Long,
 
     @SerialName("StartBikeParkingNumber")
+    @Serializable(with = StationIdSerializer::class)
     val startParking: Int,
 
     @SerialName("EndBikeParkingNumber")
+    @Serializable(with = StationIdSerializer::class)
     val endParking: Int,
 
     @SerialName("StartDate")
@@ -64,6 +69,8 @@ data class Ride(
     val endDate: LocalDateTime
 ) : Event() {
     fun isElectric() = bikeType == BikeType.Electric
+
+    fun isOmni() = bikeType == BikeType.Omni
 }
 
 @Serializable

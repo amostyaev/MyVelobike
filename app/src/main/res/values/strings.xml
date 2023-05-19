@@ -15,6 +15,7 @@
     <string name="action_sync">Sync</string>
     <string name="action_sync_completed">Sync completed</string>
 
+    <string name="ride_omni">Omni</string>
     <string name="ride_distance">%.1f km</string>
     <string name="ride_speed">%.1f km/h</string>
 

@@ -94,6 +94,7 @@ class RideViewHolder(private val binding: ItemRideBinding) : RecyclerView.ViewHo
         val title = "${ride.data.startDate.date.asString()} ${ride.data.startDate.asTimeString()} - ${ride.data.endDate.asTimeString()} (${ride.data.startParking} - ${ride.data.endParking})"
         binding.rideDate.text = title
         binding.rideElectric.isVisible = ride.data.isElectric()
+        binding.rideOmni.isVisible = ride.data.isOmni()
         binding.rideDistance.text = binding.root.context.getString(R.string.ride_distance, ride.data.distance / 1000f)
         binding.rideBike.text = ride.data.bikeId.toString()
         binding.rideTime.text = ride.data.duration.asTimeString(binding.root.context)

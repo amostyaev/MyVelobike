@@ -27,6 +27,16 @@
         app:layout_constraintStart_toEndOf="@id/ride_date"
         app:layout_constraintTop_toTopOf="@id/ride_date" />
 
+    <ImageView
+        android:id="@+id/ride_omni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/ride_omni"
+        android:src="@drawable/ic_bike_omni"
+        app:layout_constraintBottom_toBottomOf="@id/ride_date"
+        app:layout_constraintStart_toEndOf="@id/ride_date"
+        app:layout_constraintTop_toTopOf="@id/ride_date" />
+
     <TextView
         android:id="@+id/ride_distance"
         android:layout_width="wrap_content"

@@ -39,7 +39,7 @@ class BikeViewModel(application: Application) : AndroidViewModel(application) {
         emit(rides.filter { it.startDate.toInstant(TimeZone.UTC).epochSeconds >= dates.first / 1000 && it.endDate.toInstant(TimeZone.UTC).epochSeconds <= dates.second / 1000 })
     }
 
-    fun syncStats() = service.syncStats().catch {  }.flowOn(Dispatchers.IO)
+    fun syncStats() = service.syncStats().catch { it.printStackTrace() }.flowOn(Dispatchers.IO)
 
     fun updateDates(start: Long, end: Long) {
         _dates.value = start to end
