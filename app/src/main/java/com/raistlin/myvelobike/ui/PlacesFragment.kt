@@ -59,6 +59,7 @@ class PlacesFragment : MapFragment() {
             map.addMarker {
                 title("${place.id} ${place.visits}")
                 position(place.position.toLatLng())
+                if (place.visits == 0) zIndex(1f)
                 icon(
                     BitmapDescriptorFactory.fromBitmap(
                         getMarkerBitmap(
