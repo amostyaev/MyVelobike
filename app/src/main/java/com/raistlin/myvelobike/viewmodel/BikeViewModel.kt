@@ -27,8 +27,8 @@ class BikeViewModel(application: Application) : AndroidViewModel(application) {
         calendar[Calendar.HOUR_OF_DAY] = 23
         calendar[Calendar.MINUTE] = 59
         val end = calendar.timeInMillis
-        calendar[Calendar.MONTH] = Calendar.APRIL
-        calendar[Calendar.DAY_OF_MONTH] = 1
+        calendar[Calendar.MONTH] = Calendar.MARCH
+        calendar[Calendar.DAY_OF_MONTH] = 25
         val start = calendar.timeInMillis
         _dates = MutableStateFlow(start to end)
     }
