@@ -2,7 +2,12 @@ package com.raistlin.myvelobike.store
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.raistlin.myvelobike.dto.Authorization
 import com.raistlin.myvelobike.dto.LoginData
@@ -21,10 +26,12 @@ private val Context.prefsDataStore: DataStore<Preferences> by preferencesDataSto
 
 private val AUTH_LOGIN = stringPreferencesKey("auth_login")
 private val AUTH_PIN = stringPreferencesKey("auth_pin")
-private val AUTH_TOKEN = stringPreferencesKey("auth_token")
-private val AUTH_REFRESH_TOKEN = stringPreferencesKey("auth_refresh_token")
+private val AUTH_PWA_TOKEN = stringPreferencesKey("auth_pwa_token")
+private val AUTH_MOBILE_TOKEN = stringPreferencesKey("auth_mobile_token")
 private val PREFS_LAST_SYNC = longPreferencesKey("prefs_last_sync")
 private val PREFS_BALANCE = intPreferencesKey("prefs_balance")
+private val PREFS_QRATOR = stringPreferencesKey("prefs_qrator_id")
+private val PREFS_QRATOR_TIME = longPreferencesKey("prefs_qrator_time")
 
 suspend fun Context.saveLoginData(data: LoginData) {
     authDataStore.edit { preferences ->
@@ -49,8 +56,8 @@ suspend fun Context.getLoginData() = authDataStore.data
 
 suspend fun Context.saveAuthData(auth: Authorization) {
     authDataStore.edit { preferences ->
-        preferences[AUTH_TOKEN] = auth.token
-        preferences[AUTH_REFRESH_TOKEN] = auth.refreshToken
+        preferences[AUTH_PWA_TOKEN] = auth.pwaToken
+        preferences[AUTH_MOBILE_TOKEN] = auth.mobileToken
     }
 }
 
@@ -63,8 +70,8 @@ suspend fun Context.getAuthData() = authDataStore.data
         }
     }.map { preferences ->
         Authorization(
-            token = preferences[AUTH_TOKEN] ?: "",
-            refreshToken = preferences[AUTH_REFRESH_TOKEN] ?: ""
+            pwaToken = preferences[AUTH_PWA_TOKEN] ?: "",
+            mobileToken = preferences[AUTH_MOBILE_TOKEN] ?: ""
         )
     }.stateIn(MainScope())
 
@@ -100,4 +107,22 @@ suspend fun Context.getBalance() = prefsDataStore.data
         }
     }.map { preferences ->
         preferences[PREFS_BALANCE] ?: 0
+    }.stateIn(MainScope())
+
+suspend fun Context.saveQrator(id: String, time: Long) {
+    prefsDataStore.edit { preferences ->
+        preferences[PREFS_QRATOR] = id
+        preferences[PREFS_QRATOR_TIME] = time
+    }
+}
+
+suspend fun Context.getQrator() = prefsDataStore.data
+    .catch { exception ->
+        if (exception is IOException) {
+            emit(emptyPreferences())
+        } else {
+            throw exception
+        }
+    }.map { preferences ->
+        (preferences[PREFS_QRATOR] ?: "") to (preferences[PREFS_QRATOR_TIME] ?: 0)
     }.stateIn(MainScope())

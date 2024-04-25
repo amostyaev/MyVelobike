@@ -3,6 +3,8 @@ package com.raistlin.myvelobike.dto
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.nullable
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -12,71 +14,61 @@ import kotlin.math.max
 @Serializable
 data class Station(
 
-    @SerialName("Id")
+    @SerialName("static_firestore_id")
     @Serializable(with = StationIdSerializer::class)
     val id: Int,
 
-    @SerialName("Address")
+    @SerialName("addr")
     val address: String,
 
-    @SerialName("AvailableElectricBikes")
+    @SerialName("num_of_available_electric_bikes")
+    @Serializable(with = NumNullableSerializer::class)
     val availableElectricBikes: Int,
 
-    @SerialName("AvailableOrdinaryBikes")
+    @SerialName("num_of_available_non_electric_bikes")
+    @Serializable(with = NumNullableSerializer::class)
     val availableOrdinaryBikes: Int,
 
-    @SerialName("FreeElectricPlaces")
+    @SerialName("num_of_free_electric_slots")
+    @Serializable(with = NumNullableSerializer::class)
     val freeElectricPlaces: Int,
 
-    @SerialName("FreeOrdinaryPlaces")
+    @SerialName("num_of_free_non_electric_slots")
+    @Serializable(with = NumNullableSerializer::class)
     val freeOrdinaryPlaces: Int,
 
-    @SerialName("TotalElectricPlaces")
+    @SerialName("num_of_electric_slots")
+    @Serializable(with = NumNullableSerializer::class)
     val totalElectricPlaces: Int,
 
-    @SerialName("TotalOrdinaryPlaces")
+    @SerialName("num_of_non_electric_slots")
+    @Serializable(with = NumNullableSerializer::class)
     val totalOrdinaryPlaces: Int,
 
-    @SerialName("Position")
-    val position: Position,
+    @SerialName("latitude")
+    val latitude: Double,
 
-    @SerialName("IsLocked")
+    @SerialName("longitude")
+    val longitude: Double,
+
+    @SerialName("station_status")
+    @Serializable(with = IsLockedSerializer::class)
     val isLocked: Boolean,
 
-    @SerialName("IsOverflow")
+    @SerialName("station_overflowed")
     val isOverflow: Boolean,
 
-    @SerialName("StationTypes")
-    val types: List<StationType>
+    @SerialName("type")
+    val type: Int
 ) {
     fun fillStatus() = when (isLocked) {
         true -> -1
         false -> (availableElectricBikes + availableOrdinaryBikes) * 100 / max(totalElectricPlaces + totalOrdinaryPlaces, 1)
     }
 
-    fun isOrdinary() = types.contains(StationType.Ordinary)
+    fun isOrdinary() = type == 0
 
-    fun isElectric() = types.contains(StationType.Electric)
-}
-
-@Serializable
-data class Position(
-
-    @SerialName("Lat")
-    val lat: Double,
-
-    @SerialName("Lon")
-    val lon: Double
-)
-
-@Serializable
-enum class StationType {
-
-    @SerialName("ordinary")
-    Ordinary,
-
-    @SerialName("electric")
-    Electric
+    fun isElectric() = type == 1
 }
 
 object StationIdSerializer : KSerializer<Int> {
@@ -95,5 +87,35 @@ object StationIdSerializer : KSerializer<Int> {
             .replace("m", "10")
             .replace("ot", "1000")
             .toInt()
+    }
+}
+
+object NumNullableSerializer : KSerializer<Int> {
+
+    private val delegate = Int.serializer().nullable
+
+    override val descriptor = PrimitiveSerialDescriptor("Bike.Num", PrimitiveKind.INT)
+
+    override fun serialize(encoder: Encoder, value: Int) {
+        encoder.encodeInt(value)
+    }
+
+    override fun deserialize(decoder: Decoder): Int {
+        return delegate.deserialize(decoder) ?: 0
+    }
+}
+
+object IsLockedSerializer : KSerializer<Boolean> {
+
+    private val delegate = Int.serializer()
+
+    override val descriptor = PrimitiveSerialDescriptor("Bike.Locked", PrimitiveKind.BOOLEAN)
+
+    override fun serialize(encoder: Encoder, value: Boolean) {
+        encoder.encodeBoolean(value)
+    }
+
+    override fun deserialize(decoder: Decoder): Boolean {
+        return delegate.deserialize(decoder) != 1
     }
 }

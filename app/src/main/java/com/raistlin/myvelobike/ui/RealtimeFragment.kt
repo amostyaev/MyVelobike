@@ -55,7 +55,7 @@ class RealtimeFragment : MapFragment() {
         stations.forEach { station ->
             map.addMarker {
                 title(station.id.toString())
-                position(station.position.toLatLng())
+                position(station.toLatLng())
                 icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(getStationIcon(station.isElectric(), station.fillStatus()))))
             }?.apply {
                 tag = station.id

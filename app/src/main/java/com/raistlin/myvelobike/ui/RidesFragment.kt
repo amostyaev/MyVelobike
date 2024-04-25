@@ -12,6 +12,7 @@ import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.adapter.RidesAdapter
 import com.raistlin.myvelobike.databinding.FragmentRidesBinding
 import com.raistlin.myvelobike.dto.Ride
+import kotlinx.coroutines.launch
 
 class RidesFragment : Fragment() {
 
@@ -28,7 +29,7 @@ class RidesFragment : Fragment() {
             binding.list.scrollToPosition(0)
         }.apply { addRides(rides) }
         binding.list.itemAnimator = null
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             records = binding.records.getFragment<RidesRecordsFragment>()
         }
 

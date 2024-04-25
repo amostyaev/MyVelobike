@@ -19,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ktx.awaitMap
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.databinding.FragmentMapBinding
-import com.raistlin.myvelobike.dto.Position
+import com.raistlin.myvelobike.dto.Station
 import com.raistlin.myvelobike.store.getLastSync
 import com.raistlin.myvelobike.util.dp
 import com.raistlin.myvelobike.viewmodel.MapViewModel
@@ -34,7 +34,7 @@ abstract class MapFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentMapBinding.inflate(inflater, container, false)
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
             val map = mapFragment.awaitMap().apply {
                 uiSettings.apply {
@@ -50,7 +50,7 @@ abstract class MapFragment : Fragment() {
 
     protected open fun setupBinding(binding: FragmentMapBinding) {
         binding.mapSync.setOnClickListener {
-            lifecycleScope.launchWhenResumed {
+            lifecycleScope.launch {
                 makeSync()
                 Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
             }
@@ -95,5 +95,5 @@ abstract class MapFragment : Fragment() {
         requireNotNull(ContextCompat.getDrawable(requireContext(), resourceId))
             .toBitmap(width = 16.dp(requireContext()), height = 16.dp(requireContext()))
 
-    protected fun Position.toLatLng() = LatLng(lat, lon)
+    protected fun Station.toLatLng() = LatLng(latitude, longitude)
 }

@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.maps.android.ktx.addMarker
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.dto.Place
+import com.raistlin.myvelobike.dto.toLatLng
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -58,7 +59,7 @@ class PlacesFragment : MapFragment() {
         stations.forEach { place ->
             map.addMarker {
                 title("${place.id} ${place.visits}")
-                position(place.position.toLatLng())
+                position(place.toLatLng())
                 if (place.visits == 0) zIndex(1f)
                 icon(
                     BitmapDescriptorFactory.fromBitmap(

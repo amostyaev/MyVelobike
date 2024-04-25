@@ -1,11 +1,8 @@
 package com.raistlin.myvelobike.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.raistlin.myvelobike.dto.Position
 import com.raistlin.myvelobike.dto.Station
-import com.raistlin.myvelobike.dto.StationType
 
 @Entity
 data class StationEntity(
@@ -18,14 +15,14 @@ data class StationEntity(
     val freeOrdinaryPlaces: Int,
     val totalElectricPlaces: Int,
     val totalOrdinaryPlaces: Int,
-    @Embedded
-    val position: Position,
+    val latitude: Double,
+    val longitude: Double,
     val isLocked: Boolean,
     val isOverflow: Boolean,
-    val types: List<StationType>
+    val type: Int
 ) {
     fun toDto() = Station(
-        id, address, availableElectricBikes, availableOrdinaryBikes, freeElectricPlaces, freeOrdinaryPlaces, totalElectricPlaces, totalOrdinaryPlaces, position, isLocked, isOverflow, types
+        id, address, availableElectricBikes, availableOrdinaryBikes, freeElectricPlaces, freeOrdinaryPlaces, totalElectricPlaces, totalOrdinaryPlaces, latitude, longitude, isLocked, isOverflow, type
     )
 
     companion object {
@@ -38,10 +35,11 @@ data class StationEntity(
             station.freeOrdinaryPlaces,
             station.totalElectricPlaces,
             station.totalOrdinaryPlaces,
-            station.position,
+            station.latitude,
+            station.longitude,
             station.isLocked,
             station.isOverflow,
-            station.types
+            station.type
         )
     }
 }

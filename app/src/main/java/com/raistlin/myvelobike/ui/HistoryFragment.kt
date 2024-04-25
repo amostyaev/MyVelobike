@@ -36,7 +36,7 @@ class HistoryFragment : Fragment() {
         val binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         binding.historySync.setOnClickListener {
-            lifecycleScope.launchWhenResumed {
+            lifecycleScope.launch {
                 viewModel.syncStats().collect()
                 Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
             }

@@ -32,7 +32,7 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
                 put(ride.endParking, acc.getOrElse(ride.endParking) { 0 } + 1)
             }
         }
-        emit(stations.map { Place(it.id, it.position, it.fillStatus(), it.isElectric(), visits.getOrElse(it.id) { 0 }) })
+        emit(stations.map { Place(it.id, it.latitude, it.longitude, it.fillStatus(), it.isElectric(), visits.getOrElse(it.id) { 0 }) })
     }.shareIn(viewModelScope, SharingStarted.Lazily, 1)
 
     val filteredStations = stations.combineTransform(electricFilter) { stations, electric ->

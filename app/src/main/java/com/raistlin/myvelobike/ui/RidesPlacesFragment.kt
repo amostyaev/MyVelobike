@@ -44,7 +44,7 @@ class RidesPlacesFragment : MapFragment() {
         stations.forEach { station ->
             map.addMarker {
                 title("${station.id}")
-                position(station.position.toLatLng())
+                position(station.toLatLng())
                 icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmap(R.drawable.ic_place_visited)))
             }?.apply {
                 tag = station.id

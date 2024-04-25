@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.raistlin.myvelobike.R
 import com.raistlin.myvelobike.databinding.ActivityMainBinding
 import com.raistlin.myvelobike.store.getLoginData
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainToolbar.setupWithNavController(navController, appBarConfiguration)
         binding.bottomNavigation.setupWithNavController(navController)
 
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             if (getLoginData().value.login.isEmpty()) {
                 navController.navigate(R.id.authFragment)
             }
