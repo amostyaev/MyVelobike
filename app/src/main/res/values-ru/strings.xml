@@ -10,10 +10,12 @@
     <string name="title_realtime">В реальном времени</string>
     <string name="title_places">Места</string>
 
+    <string name="action_retry">Повторить</string>
     <string name="action_stats">Статистика</string>
     <string name="action_electric">Показать электрические велосипеды</string>
     <string name="action_sync">Синхронизация</string>
     <string name="action_sync_completed">Синхронизация завершена</string>
+    <string name="action_sync_error">Ошибка синхронизации, повторите попытку</string>
 
     <string name="ride_omni">Омни</string>
     <string name="ride_distance">%.1f км</string>

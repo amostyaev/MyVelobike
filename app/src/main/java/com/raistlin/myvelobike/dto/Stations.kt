@@ -66,9 +66,9 @@ data class Station(
         false -> (availableElectricBikes + availableOrdinaryBikes) * 100 / max(totalElectricPlaces + totalOrdinaryPlaces, 1)
     }
 
-    fun isOrdinary() = type == 0
+    fun isOrdinary() = type == 0 || type == 2
 
-    fun isElectric() = type == 1
+    fun isElectric() = type == 1 || type == 2
 }
 
 object StationIdSerializer : KSerializer<Int> {

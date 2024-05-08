@@ -8,8 +8,14 @@ import com.raistlin.myvelobike.db.AppDb
 import com.raistlin.myvelobike.dto.Place
 import com.raistlin.myvelobike.entity.toDto
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combineTransform
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 
 class MapViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -43,13 +49,13 @@ class MapViewModel(application: Application) : AndroidViewModel(application) {
         emit(stations.find { it.id == selected })
     }
 
-    fun syncStations() = viewModelScope.launch {
+    suspend fun syncStations() {
         service.syncStations()
     }
 
-    fun syncAll() = viewModelScope.launch {
+    suspend fun syncAll() {
         service.syncStations()
-        service.syncStats().catch {  }.flowOn(Dispatchers.IO).collect()
+        service.syncStats().catch { }.flowOn(Dispatchers.IO).collect()
     }
 
     fun filterStations(electric: Boolean) {

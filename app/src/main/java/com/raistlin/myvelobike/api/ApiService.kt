@@ -47,11 +47,11 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.charsets.Charset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.Closeable
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -78,7 +78,12 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
             setBody(LoginData(login, pin))
         }
         if (!response.status.isSuccess()) {
-            throw RuntimeException("Received ${response.status.value}: ${response.status.description}")
+            if (response.status.value == 403) {
+                passQrator()
+                return login(login, pin)
+            } else {
+                throw RuntimeException("Received ${response.status.value}: ${response.status.description}")
+            }
         }
         val storage = response.body<TokenStorage>()
         val mobile = json.decodeFromString<MobileTokenStorage>(Base64.decode(storage.token.split(".")[1]).toString(Charset.defaultCharset()))
@@ -147,7 +152,7 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
     @SuppressLint("SetJavaScriptEnabled")
     private suspend fun passQrator() {
         val qratorId = withContext(Dispatchers.Main) {
-            suspendCoroutine { continuation ->
+            suspendCancellableCoroutine { continuation ->
                 val webView = WebView(context)
                 webView.clearCache(true)
                 webView.settings.apply { javaScriptEnabled = true }
@@ -159,7 +164,9 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
 
                         val cookies = CookieManager.getInstance().getCookie(url)
                         cookies.split(";").map { it.trim() }.find { it.contains("qrator_jsid") }?.split("=")?.get(1)?.let {
-                            continuation.resume(it)
+                            if (continuation.isActive) {
+                                continuation.resume(it)
+                            }
                         }
                     }
                 }
@@ -176,7 +183,7 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
     }
 
     private suspend fun HttpRequestBuilder.veloCookies() {
-        header("ApiKey", API_KEY)
+        header("ApiKey", context.getAuthData().value.pwaToken)
         cookie("qrator_jsid", context.getQrator().value.first)
     }
 
@@ -195,10 +202,12 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
                     BearerTokens(if (pwa) auth.pwaToken else auth.mobileToken, "")
                 }
                 refreshTokens {
-                    val loginData = context.getLoginData()
-                    val auth = login(loginData.value.login, loginData.value.pin)
-                    context.saveAuthData(auth)
-                    BearerTokens(auth.pwaToken, "")
+                    runCatching {
+                        val loginData = context.getLoginData()
+                        val auth = login(loginData.value.login, loginData.value.pin)
+                        context.saveAuthData(auth)
+                        BearerTokens(auth.pwaToken, "")
+                    }.getOrNull()
                 }
                 sendWithoutRequest { request ->
                     request.url.pathSegments.last() != "token" && request.url.pathSegments.last() != "authenticate"
@@ -210,8 +219,5 @@ class ApiService(private val context: Context, private val dao: RideDao) : Close
     @Suppress("RegExpRedundantEscape")
     companion object {
         const val STAT_LIMIT = 15
-
-        const val API_KEY =
-            "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OTg3MjM3Iiwicm9sZXMiOlsiQ0xJRU5UIl0sIm1vYmlsZV90b2tlbiI6IlJiWkdwbHZ5a25HbGV1dG4yUVFmYmdwNjVLT2MwNUxRdGF5b2NJeXZxYyIsImV4dGVybmFsX2lkIjoiNTMzMjAxIiwidXNlcl90eXBlIjoiY2xpZW50Iiwibm1jX2FjY2Vzc190b2tlbiI6IlJiWkdwbHZ5a25HbGV1dG4yUVFmYmdwNjVLT2MwNUxRdGF5b2NJeXZxYyIsIm5tY19yZWZyZXNoX3Rva2VuIjoiZGdSd1gxWm9KZVJxVDNVcUJSc0VIVjg1aTg5eGhaQkRYWjNOTDU0bVI2bTR3OFRxIiwibm1jX3Rva2VuX3R5cGUiOiJCZWFyZXIiLCJubWNfdXNlcl9pZCI6IjUzMzIwMSIsIm5tY19leHBpcmVzX2luIjoiODY0MDAwIiwibm1jX2ZpcmViYXNlX3Rva2VuIjoiZXlKaGJHY2lPaUFpVWxNeU5UWWlMQ0FpZEhsd0lqb2dJa3BYVkNJc0lDSnJhV1FpT2lBaU9UZ3lNbVV6WlRobFpUSXdOV00wT1RCbE5UVTRZakV6WVdKak9HSmlZVGN3WmpVeVpqaGxNQ0o5LmV5SnBjM01pT2lBaVptbHlaV0poYzJVdFlXUnRhVzV6WkdzdE1HUm9aV1ZBZG1Wc2IySnBhMlV0WWprM05tWXVhV0Z0TG1kelpYSjJhV05sWVdOamIzVnVkQzVqYjIwaUxDQWljM1ZpSWpvZ0ltWnBjbVZpWVhObExXRmtiV2x1YzJSckxUQmthR1ZsUUhabGJHOWlhV3RsTFdJNU56Wm1MbWxoYlM1bmMyVnlkbWxqWldGalkyOTFiblF1WTI5dElpd2dJbUYxWkNJNklDSm9kSFJ3Y3pvdkwybGtaVzUwYVhSNWRHOXZiR3RwZEM1bmIyOW5iR1ZoY0dsekxtTnZiUzluYjI5bmJHVXVhV1JsYm5ScGRIa3VhV1JsYm5ScGRIbDBiMjlzYTJsMExuWXhMa2xrWlc1MGFYUjVWRzl2Ykd0cGRDSXNJQ0oxYVdRaU9pQWlOVE16TWpBeElpd2dJbWxoZENJNklERTNNVE00TmpZek9UWXNJQ0psZUhBaU9pQXhOekV6T0RZNU9UazJmUS5keHpWdVd5SjAwMl9vcW10Z010WlZrdllPQkQzdFY2OE14bFlSbDBsb095OVlkOTYxQWZ0akdYcXU3SjlQU0RwTFBFb3hFZi1sdF9waGZXZzJzYTJmeVRQa2t0NXBMRVRwWTdOMU1IM3c0SHZHRExwYW5NNGhSdXowNVR1REticTlzWUVNbmg1WUp3dTR1MnZZWEdpcjdhQVZFcXRqSkRHUElSci1HajZDR0FUM1dfeWM4X1JzTDdKOWQ5Y3VYNjdOR3h5V3M4dXFWMGNTSE1YdlNGTGxSOE1GNFVGZTBfQ2FWaDR6MWhWZllpb0FDdFEtdTVZLXBUMjk3cHE2a19jemtZZ3hPbmJKVzNGdmZrZEwzdk5mRnhuM21mTnIwRFM0T2MwTWd5Tlh6TmdWdEFWSWxTclRiZ2ZNRE1kWjMwaHMyT0dfbEhucy1LV0JzWVJ0THVzMXciLCJpYXQiOjE3MTM4NjYzOTcsImV4cCI6MTcxMzk1Mjc5N30.gJ6TVAB8eSx22hLTCu842ABiXtliLv7rc9whz-eVRQU"
     }
 }

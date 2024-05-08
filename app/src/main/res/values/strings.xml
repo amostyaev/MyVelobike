@@ -10,10 +10,12 @@
     <string name="title_realtime">Realtime</string>
     <string name="title_places">Places</string>
 
+    <string name="action_retry">Retry</string>
     <string name="action_stats">Stats</string>
     <string name="action_electric">Show electric bikes</string>
     <string name="action_sync">Sync</string>
     <string name="action_sync_completed">Sync completed</string>
+    <string name="action_sync_error">Sync error, try again</string>
 
     <string name="ride_omni">Omni</string>
     <string name="ride_distance">%.1f km</string>

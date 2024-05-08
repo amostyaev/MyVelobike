@@ -45,7 +45,7 @@ class RealtimeFragment : MapFragment() {
     }
 
     override suspend fun makeSync() {
-        viewModel.syncStations().join()
+        viewModel.syncStations()
     }
 
     private fun showStations(map: GoogleMap, stations: List<Station>) {

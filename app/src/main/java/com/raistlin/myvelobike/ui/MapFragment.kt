@@ -25,7 +25,8 @@ import com.raistlin.myvelobike.util.dp
 import com.raistlin.myvelobike.viewmodel.MapViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 abstract class MapFragment : Fragment() {
 
@@ -51,8 +52,15 @@ abstract class MapFragment : Fragment() {
     protected open fun setupBinding(binding: FragmentMapBinding) {
         binding.mapSync.setOnClickListener {
             lifecycleScope.launch {
-                makeSync()
-                Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
+                try {
+                    makeSync()
+                    Snackbar.make(binding.root, R.string.action_sync_completed, Snackbar.LENGTH_LONG).show()
+                } catch (e: Exception) {
+                    Snackbar.make(binding.root, R.string.action_sync_error, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.action_retry) {
+                            binding.mapSync.performClick()
+                        }.show()
+                }
             }
         }
         lifecycleScope.launch {

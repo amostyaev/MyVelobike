@@ -49,7 +49,7 @@ class PlacesFragment : MapFragment() {
     }
 
     override suspend fun makeSync() {
-        viewModel.syncAll().join()
+        viewModel.syncAll()
     }
 
     private fun showPlaces(map: GoogleMap, stations: List<Place>) {
