@@ -14,7 +14,7 @@ import kotlin.math.max
 @Serializable
 data class Station(
 
-    @SerialName("static_firestore_id")
+    @SerialName("static_external_id")
     @Serializable(with = StationIdSerializer::class)
     val id: Int,
 
@@ -86,6 +86,7 @@ object StationIdSerializer : KSerializer<Int> {
             .replace("c", "10")
             .replace("m", "10")
             .replace("ot", "1000")
+            .replace("MS", "1000")
             .toInt()
     }
 }
